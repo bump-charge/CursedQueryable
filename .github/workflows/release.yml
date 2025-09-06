@@ -36,14 +36,12 @@ jobs:
       run: ./scripts/Pack.ps1
       shell: pwsh
 
-    - name: Push Nuget
-      run: dotnet nuget push /tmp/*.nupkg  --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${GITHUB_TOKEN} --skip-duplicate
+    - name: Push to NuGet
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Push Symbol
-      run: dotnet nuget push /tmp/*.snupkg --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json --api-key ${GITHUB_TOKEN}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NUGET_URL: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+        NUGET_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+      run: ./scripts/Push.ps1
+      shell: pwsh
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
