@@ -1,4 +1,4 @@
-﻿using CursedQueryable.ExpressionRewriting.Components.SelectWrapper;
+using CursedQueryable.ExpressionRewriting.Components.SelectWrapper;
 using CursedQueryable.IntegrationTests.Abstract.CursedQueryableTests.Helpers;
 using CursedQueryable.IntegrationTests.Data.Entities;
 using CursedQueryable.Options;
@@ -428,6 +428,19 @@ public abstract class CursedQueryableTestsBase<TCat>(IReadOnlyList<string> prima
             .Select(cat => new Purrito { Cat = cat, Material = cat.HasExpensiveTastes ? "Silk" : "Cotton" });
 
         await RunScenario(queryable, options, o => o.ExpectedHasPage = true);
+    }
+
+    [Theory]
+    [ClassData(typeof(AllScenarios))]
+    public async Task Where_Union(bool useAsync, bool useCursor, Direction direction)
+    {
+        var options = new TestOptions(useAsync, useCursor, direction);
+
+        var queryable = RootQueryable
+            .Union(RootQueryable.Where(cat => cat.Sex == Sex.Male))
+            .Where(cat => cat.Sex == Sex.Female);
+
+        await RunScenario(queryable, options);
     }
 
     protected class Purrito

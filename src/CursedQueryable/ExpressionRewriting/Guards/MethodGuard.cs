@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 
 namespace CursedQueryable.ExpressionRewriting.Guards;
 
@@ -16,7 +16,8 @@ internal class MethodGuard : ExpressionVisitor
         nameof(Queryable.Select),
         nameof(Queryable.Skip),
         nameof(Queryable.Take),
-        nameof(Queryable.Where)
+        nameof(Queryable.Where),
+        nameof(Queryable.Union),
     };
 
     protected override Expression VisitMethodCall(MethodCallExpression node)
